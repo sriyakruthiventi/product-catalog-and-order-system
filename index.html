@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog & Order System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">🛒</div>
+            <div>
+                <h2>StorePro</h2>
+                <span>Management System</span>
+            </div>
+        </div>
+
+        <nav>
+            <button class="nav-item active" data-page="dashboard">📊 Dashboard</button>
+            <button class="nav-item" data-page="products">📦 Products</button>
+            <button class="nav-item" data-page="orders">🧾 Order History</button>
+            <button class="nav-item" data-page="customers">👥 Customers</button>
+            <button class="nav-item" data-page="analytics">📈 Analytics</button>
+            <button class="nav-item" data-page="forecast">🔮 Demand Forecast</button>
+        </nav>
+
+        <div class="server-status">
+            <span class="dot"></span>
+            <span>System Online</span>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p>Product Catalog & Order Management</p>
+            </div>
+
+            <button class="refresh-btn" onclick="refreshAll()">↻ Refresh</button>
+        </header>
+
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page active-page">
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div>
+                        <span>Total Products</span>
+                        <strong id="totalProducts">0</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div>
+                        <span>Total Customers</span>
+                        <strong id="totalCustomers">0</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🧾</div>
+                    <div>
+                        <span>Total Orders</span>
+                        <strong id="totalOrders">0</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div>
+                        <span>Total Sales</span>
+                        <strong id="totalSales">₹0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Most & Least Sold Products</h2>
+                    </div>
+                    <canvas id="salesChart"></canvas>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Category Sales</h2>
+                    </div>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+
+            </div>
+
+            <div class="dashboard-grid">
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Recent Orders</h2>
+                        <button onclick="showPage('orders')">View All</button>
+                    </div>
+                    <div id="recentOrders"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Low Stock / Reorder Alerts</h2>
+                    </div>
+                    <div id="dashboardAlerts"></div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- PRODUCTS -->
+        <section id="products" class="page">
+
+            <div class="toolbar">
+                <input
+                    type="text"
+                    id="productSearch"
+                    placeholder="🔍 Search products..."
+                    oninput="renderProducts()"
+                >
+
+                <select id="categoryFilter" onchange="renderProducts()">
+                    <option value="all">All Categories</option>
+                </select>
+            </div>
+
+            <div id="productsGrid" class="products-grid"></div>
+
+        </section>
+
+        <!-- ORDERS -->
+        <section id="orders" class="page">
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🧾</div>
+                    <div>
+                        <span>Total Orders</span>
+                        <strong id="orderHistoryCount">0</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div>
+                        <span>Total Items</span>
+                        <strong id="orderItemCount">0</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div>
+                        <span>Total Sales</span>
+                        <strong id="orderSalesTotal">₹0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <input
+                    type="text"
+                    id="orderSearch"
+                    placeholder="🔍 Search customer or product..."
+                    oninput="renderOrders()"
+                >
+            </div>
+
+            <div class="panel">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="ordersTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- CUSTOMERS -->
+        <section id="customers" class="page">
+
+            <div class="stats-grid customer-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div>
+                        <span>Customers</span>
+                        <strong id="customerCount">0</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🔁</div>
+                    <div>
+                        <span>Repeat Customers</span>
+                        <strong id="repeatCustomers">0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div id="customersList" class="customers-grid"></div>
+
+        </section>
+
+        <!-- ANALYTICS -->
+        <section id="analytics" class="page">
+
+            <div class="analytics-grid">
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Products by Units Sold</h2>
+                    </div>
+                    <canvas id="analyticsSalesChart"></canvas>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Customer Orders</h2>
+                    </div>
+                    <canvas id="customerChart"></canvas>
+                </div>
+
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Product Sales Ranking</h2>
+                </div>
+                <div id="rankingList"></div>
+            </div>
+
+        </section>
+
+        <!-- FORECAST -->
+        <section id="forecast" class="page">
+
+            <div class="forecast-intro">
+                <h2>🔮 Demand Forecast</h2>
+                <p>
+                    Forecast is generated using historical order quantities.
+                    Products with low stock or forecasted demand above available
+                    stock are marked for reorder.
+                </p>
+
+                <button class="primary-btn" onclick="runForecast()">
+                    Generate Forecast
+                </button>
+            </div>
+
+            <div id="forecastList" class="forecast-grid"></div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- PRODUCT DETAILS MODAL -->
+<div id="productModal" class="modal">
+    <div class="modal-box">
+
+        <button class="close-btn" onclick="closeProductModal()">×</button>
+
+        <div id="productDetails"></div>
+
+    </div>
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

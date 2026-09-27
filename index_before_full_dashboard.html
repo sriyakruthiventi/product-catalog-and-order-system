@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CatalogPro - Product Catalog & Order System</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">C</div>
+
+            <div>
+                <h2>CatalogPro</h2>
+                <span>Store Management</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+
+            <button class="menu-item active" data-page="dashboard">
+                <span>📊</span>
+                Dashboard
+            </button>
+
+            <button class="menu-item" data-page="products">
+                <span>📦</span>
+                Products
+            </button>
+
+            <button class="menu-item" data-page="orders">
+                <span>🛒</span>
+                Order History
+            </button>
+
+            <button class="menu-item" data-page="customers">
+                <span>👥</span>
+                Customers
+            </button>
+
+            <button class="menu-item" data-page="forecast">
+                <span>📈</span>
+                Demand Forecast
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Online</strong>
+                    <small>All services running</small>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+                <h1 id="page-title">Dashboard</h1>
+                <p id="page-subtitle">
+                    Overview of your store
+                </p>
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="server-status">
+                    <span class="status-dot"></span>
+                    Java Server Online
+                </div>
+
+                <div class="profile">
+                    <div class="profile-avatar">A</div>
+
+                    <div>
+                        <strong>Admin</strong>
+                        <small>Store Manager</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD PAGE ================= -->
+        <section id="dashboard" class="page active-page">
+
+            <div class="welcome-card">
+
+                <div>
+                    <span class="eyebrow">STORE MANAGEMENT</span>
+
+                    <h2>
+                        Welcome to CatalogPro 👋
+                    </h2>
+
+                    <p>
+                        Manage products, customers, orders and
+                        demand forecasting from one dashboard.
+                    </p>
+                </div>
+
+                <div class="welcome-icon">
+                    📦
+                </div>
+
+            </div>
+
+
+            <!-- STAT CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">📦</div>
+
+                    <div>
+                        <span>Total Products</span>
+                        <strong id="total-products">0</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">🛒</div>
+
+                    <div>
+                        <span>Total Orders</span>
+                        <strong id="total-orders">0</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">⚠️</div>
+
+                    <div>
+                        <span>Reorder Alerts</span>
+                        <strong id="reorder-alerts">0</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon green">₹</div>
+
+                    <div>
+                        <span>Catalog Value</span>
+                        <strong id="catalog-value">₹0</strong>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- CHARTS -->
+
+            <div class="charts-grid">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>Products by Category</h3>
+                            <p>Product distribution</p>
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>Stock Overview</h3>
+                            <p>Current inventory status</p>
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="stockChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOW STOCK -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>⚠️ Low Stock & Reorder Alerts</h3>
+
+                        <p>
+                            Products that may need attention
+                        </p>
+                    </div>
+
+                    <button
+                        class="view-button"
+                        onclick="showPage('products')">
+                        View Products
+                    </button>
+
+                </div>
+
+                <div id="alert-list" class="alert-list">
+
+                    <div class="empty-state">
+                        Loading inventory...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PRODUCTS PAGE ================= -->
+        <section id="products" class="page">
+
+            <div class="page-actions">
+
+                <div>
+                    <h2>Products</h2>
+
+                    <p>
+                        Manage your product catalog and inventory.
+                    </p>
+                </div>
+
+                <div class="filters">
+
+                    <input
+                        type="text"
+                        id="product-search"
+                        placeholder="🔍 Search products..."
+                    >
+
+                    <select id="category-filter">
+                        <option value="all">All Categories</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div id="products-grid" class="products-grid">
+
+                <div class="loading">
+                    Loading products...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ORDERS PAGE ================= -->
+        <section id="orders" class="page">
+
+            <div class="page-actions">
+
+                <div>
+                    <h2>Order History</h2>
+
+                    <p>
+                        View all customer orders.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="panel table-panel">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="orders-table">
+
+                            <tr>
+                                <td colspan="5" class="empty-cell">
+                                    Loading orders...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CUSTOMERS PAGE ================= -->
+        <section id="customers" class="page">
+
+            <div class="page-actions">
+
+                <div>
+                    <h2>Customers</h2>
+
+                    <p>
+                        Manage registered customers.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="panel table-panel">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="customers-table">
+
+                            <tr>
+                                <td colspan="4" class="empty-cell">
+                                    Loading customers...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= FORECAST PAGE ================= -->
+        <section id="forecast" class="page">
+
+            <div class="page-actions">
+
+                <div>
+                    <h2>Demand Forecast</h2>
+
+                    <p>
+                        Predict future product demand and identify
+                        reorder requirements.
+                    </p>
+                </div>
+
+                <button
+                    id="run-forecast"
+                    class="primary-button">
+
+                    📈 Run Forecast
+
+                </button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Product</th>
+                                <th>Current Stock</th>
+                                <th>Reorder Level</th>
+                                <th>Forecast</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="forecast-table">
+
+                            <tr>
+                                <td colspan="5" class="empty-cell">
+                                    Click "Run Forecast" to generate predictions.
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <span>
+                CatalogPro • Product Catalog & Order System
+            </span>
+
+            <span>
+                Java • SQLite • Python Flask
+            </span>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>

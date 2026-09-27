@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CatalogPro - Product Catalog</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div>
+        <h1>CatalogPro</h1>
+        <p>Product Catalog & Order System</p>
+    </div>
+
+    <button id="refreshBtn" class="secondary">
+        Refresh
+    </button>
+
+</header>
+
+
+<main class="container">
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div>
+
+            <span class="badge">
+                Java + Python + SQLite + AVL
+            </span>
+
+            <h2>
+                Browse Products. Place Orders. Predict Demand.
+            </h2>
+
+            <p>
+                Java handles product catalog and order management,
+                while Python analyzes order history and forecasts
+                future product demand.
+            </p>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div>
+                <strong id="productCount">0</strong>
+                <span>Products</span>
+            </div>
+
+            <div>
+                <strong id="alertCount">0</strong>
+                <span>Reorder Alerts</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH -->
+
+    <section class="toolbar">
+
+        <input
+            id="searchInput"
+            type="search"
+            placeholder="Search products..."
+        >
+
+        <select id="categoryFilter">
+
+            <option value="">
+                All Categories
+            </option>
+
+        </select>
+
+        <button id="forecastBtn">
+            Run Demand Forecast
+        </button>
+
+    </section>
+
+
+    <section
+        id="message"
+        class="message hidden">
+    </section>
+
+
+    <!-- PRODUCTS -->
+
+    <section
+        id="productGrid"
+        class="grid">
+    </section>
+
+
+    <!-- ORDERS -->
+
+    <section class="orders-section">
+
+        <div class="section-title">
+
+            <h2>
+                Recent Orders
+            </h2>
+
+            <button
+                id="ordersBtn"
+                class="secondary">
+
+                Load Orders
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="ordersTable"
+            class="table-wrap">
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ORDER MODAL -->
+
+<div
+    id="orderModal"
+    class="modal hidden">
+
+    <div class="modal-card">
+
+        <button
+            id="closeModal"
+            class="close">
+
+            ×
+
+        </button>
+
+        <h2>
+            Place Order
+        </h2>
+
+        <p id="selectedProduct"></p>
+
+
+        <form id="orderForm">
+
+            <input
+                id="customerName"
+                required
+                placeholder="Customer Name"
+            >
+
+
+            <input
+                id="email"
+                required
+                type="email"
+                placeholder="Email"
+            >
+
+
+            <input
+                id="quantity"
+                required
+                type="number"
+                min="1"
+                value="1"
+                placeholder="Quantity"
+            >
+
+
+            <button type="submit">
+                Place Order
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="/app.js"></script>
+
+</body>
+</html>
